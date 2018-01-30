@@ -2,20 +2,20 @@
 ////GET
 let receive = new XMLHttpRequest();
 btn.addEventListener('click', () => {
-receive.open('GET', 'https://www.eliftech.com/school-task');
-receive.timeout = 10000;
-receive.ontimeout = () => {
-    receive.abort();
-    throw new Error('Request Timed is out')
-}
-receive.onload = () => {
-    let arr = JSON.parse(receive.responseText);
-    console.log(arr);
-    let postData = JSON.stringify(rpn(arr.id, arr.expressions));
-    console.log(postData);
-    sendData(postData);
-}
-receive.send();
+    receive.open('GET', 'https://www.eliftech.com/school-task');
+    receive.timeout = 10000;
+    receive.ontimeout = () => {
+        receive.abort();
+        throw new Error('Request Timed is out')
+    }
+    receive.onload = () => {
+        let arr = JSON.parse(receive.responseText);
+        console.log(arr);
+        let postData = JSON.stringify(rpn(arr.id, arr.expressions));
+        console.log(postData);
+        sendData(postData);
+    }
+    receive.send();
 });
 
 ////POST
@@ -35,15 +35,15 @@ function rpn(arrId, arr) {
     arr.forEach(e => {
         a.push(e.split(' '));
     });
-    resl = a.map(e => {
+    resl = a.map(ar => {
         stack = [];
-        for (let i = 0; i < e.length; i++) {
-            if (!isNaN(+e[i])) {
-                stack.push(e[i]);
+        ar.forEach(e => {
+            if (!isNaN(+e)) {
+                stack.push(e);
             }
             else {
                 let el = 0, a = +stack[stack.length - 2], b = +stack[stack.length - 1]
-                switch (e[i]) {
+                switch (e) {
                     case '+':
                         el = a - b;
                         break;
@@ -61,7 +61,7 @@ function rpn(arrId, arr) {
                 stack.pop();
                 stack.push(el);
             }
-        }
+        });
         return stack[0];
     });
     obj.id = arrId;
